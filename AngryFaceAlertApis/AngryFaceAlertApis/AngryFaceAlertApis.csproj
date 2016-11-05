@@ -177,14 +177,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ImageController.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Filters\KeyFilter.cs" />
-=======
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PersonFaceController.cs" />
     <Compile Include="Controllers\PersonGroupController.cs" />
->>>>>>> 2428e1600b74d3ddc4994ffc369d8dd6c83ce106
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
