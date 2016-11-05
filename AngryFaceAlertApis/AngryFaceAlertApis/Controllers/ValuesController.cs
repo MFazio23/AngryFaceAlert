@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AngryFaceAlertApis.Filters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ namespace AngryFaceAlertApis.Controllers
         }
 
         // GET api/values/5
+        [EmotionApiAuthFilter]
         public string Get(int id)
         {
             return "value";
