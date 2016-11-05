@@ -44,7 +44,7 @@ namespace AngryFaceAlertApis.Controllers
         }
 
         [HttpPost]
-        [Route("/training")]
+        [Route("training")]
         public async Task<IHttpActionResult> TrainPersonGroup(string personGroupId)
         {
             return Ok();
