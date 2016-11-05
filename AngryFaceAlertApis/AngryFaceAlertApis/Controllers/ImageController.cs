@@ -36,9 +36,7 @@ namespace AngryFaceAlertApis.Controllers
             {
                 guids.Add(face.FaceId);
             }
-
-            await client.TrainPersonGroupAsync("skyline");
-
+            
             var person = new Person() { Name = "Unknown" };
 
             try
