@@ -14,7 +14,7 @@ namespace AngryFaceAlertApis.Controllers
 
         public PersonGroupController()
         {
-            _personGroupCoordinator = new PersonGroupCoordinator("4d93ff0e896041b8bec6ab4ce9c3c8b1");
+            _personGroupCoordinator = new PersonGroupCoordinator("");
         }
 
         [HttpGet]
