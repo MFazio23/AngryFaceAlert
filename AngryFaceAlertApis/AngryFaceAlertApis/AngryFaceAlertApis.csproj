@@ -181,6 +181,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Coordinators\Interfaces\IPersonGroupCoordinator.cs" />
+    <Compile Include="Coordinators\PersonGroupCoordinator.cs" />
     <Compile Include="Filters\KeyFilter.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\PersonFaceController.cs" />
