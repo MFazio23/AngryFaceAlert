@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 
@@ -18,12 +14,7 @@ namespace AngryFaceAlertApis.Filters
             byte[] bytes = Encoding.Unicode.GetBytes(text);
             SHA256Managed hashstring = new SHA256Managed();
             byte[] hash = hashstring.ComputeHash(bytes);
-            string hashString = string.Empty;
-            foreach (byte x in hash)
-            {
-                hashString += String.Format("{0:x2}", x);
-            }
-            return hashString;
+            return hash.Aggregate(string.Empty, (current, x) => current + $"{x:x2}");
         }
     }
 

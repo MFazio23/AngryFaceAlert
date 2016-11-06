@@ -1,62 +1,37 @@
-﻿using Microsoft.ProjectOxford.Face;
-using Microsoft.ProjectOxford.Face.Contract;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
+using AngryFaceAlertApis.Coordinators;
+using AngryFaceAlertApis.Extensions;
 
 namespace AngryFaceAlertApis.Controllers
 {
     public class ImageController : ApiController
     {
+        private readonly PersonCoordinator _personCoordinator;
+
+        public ImageController()
+        {
+            _personCoordinator = new PersonCoordinator();
+        }
+
         [HttpPost]
         [Route("1/image")]
-        public async Task<IHttpActionResult> ProcessImage(object image)
+        public async Task<IHttpActionResult> ProcessImage()
         {
-            Console.WriteLine(image);
-            Console.WriteLine(Request.Content);
+            var imageStream = await Request.Content.ReadAsStreamAsync();
 
-            var client = new FaceServiceClient("");
+            var peopleEmotions = await this._personCoordinator.GetEmotionsForPeopleFromImage(imageStream);
 
-            var content = Request.Content;
+            return Ok(peopleEmotions);
+        }
 
-            var stream = await content.ReadAsStreamAsync();
+        [HttpPost]
+        [Route("1/image")]
+        public async Task<IHttpActionResult> ProcessImage(string imageUrl)
+        {
+            var peopleEmotions = await this._personCoordinator.GetEmotionsForPeopleFromImage(imageUrl: imageUrl);
 
-            MemoryStream stream2 = new MemoryStream();
-
-            stream.CopyTo(stream2);
-            stream.Seek(0, SeekOrigin.Begin);
-
-            var faces = await client.DetectAsync(stream);
-
-            var guids = new List<Guid>();
-
-            foreach(var face in faces)
-            {
-                guids.Add(face.FaceId);
-            }
-
-            await client.TrainPersonGroupAsync("skyline");
-
-            var person = new Person() { Name = "Unknown" };
-
-            try
-            {
-                var possibilities = await client.IdentifyAsync("skyline", guids.ToArray(), 0.5f, 1);
-
-                if (possibilities != null && possibilities.Length > 0)
-                {
-                    person = await client.GetPersonAsync("skyline", possibilities[0].Candidates[0].PersonId);
-                }
-
-   
-            } catch (Exception e)
-            {
-                var stop = "";
-            }
-
-            return Ok(person);
+            return Ok(peopleEmotions);
         }
     }
 }
