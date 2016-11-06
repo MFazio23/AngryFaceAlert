@@ -35,7 +35,7 @@ namespace AngryFaceAlertApis.Coordinators
             var faceIdArray = faceIds.ToArray();
             if (faceIdArray.Any())
             {
-                var identities = await ApiClients.FaceServiceClient.IdentifyAsync(peopleGroupId, faceIdArray, 0.5f);
+                var identities = await ApiClients.FaceServiceClient.IdentifyAsync(peopleGroupId, faceIdArray, 0.25f);
 
                 if (identities.Any())
                 {
