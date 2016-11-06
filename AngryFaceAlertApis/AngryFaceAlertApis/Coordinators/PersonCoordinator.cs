@@ -7,10 +7,7 @@ using AngryFaceAlertApis.Extensions;
 using AngryFaceAlertApis.Models;
 using AngryFaceAlertApis.Utilities;
 using Microsoft.ProjectOxford.Emotion.Contract;
-using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace AngryFaceAlertApis.Coordinators
 {
@@ -18,11 +15,13 @@ namespace AngryFaceAlertApis.Coordinators
     {
         private readonly EmotionCoordinator _emotionCoordinator;
         private readonly FaceCoordinator _faceCoordinator;
+        private readonly SlackCoordinator _slackCoordinator;
 
         public PersonCoordinator()
         {
             _faceCoordinator = new FaceCoordinator();
             _emotionCoordinator = new EmotionCoordinator();
+            _slackCoordinator = new SlackCoordinator();
         }
 
         public async Task<Person> GetPerson(string personGroupId, string personId)
@@ -47,7 +46,7 @@ namespace AngryFaceAlertApis.Coordinators
 
             var peopleEmotions = GetEmotionsForPeople(emotions, people);
 
-            this.SendMessageToSlack(peopleEmotions);
+            this._slackCoordinator.SendSlackMessage(peopleEmotions);
 
             return peopleEmotions;
         }
@@ -72,31 +71,6 @@ namespace AngryFaceAlertApis.Coordinators
             }
 
             return personEmotions;
-        }
-
-        public void SendMessageToSlack(IList<PersonEmotion> personEmotions)
-        {
-            var client = new RestClient("https://hooks.slack.com/services");
-            client.AddDefaultHeader("Accept", "application/json");
-            client.AddDefaultHeader("Content-Type", "application/json");
-            var request = new RestRequest(System.Configuration.ConfigurationManager.AppSettings["SlackMessageEndUrl"])
-            {
-                Method = Method.POST,
-                RequestFormat = DataFormat.Json
-            };
-
-            var body = new
-            {
-                text = JsonConvert.SerializeObject(personEmotions),
-                username = "Angry Kevin Bot",
-                icon_url = System.Configuration.ConfigurationManager.AppSettings["SlackMessageIconUrl"],
-                mrkdwn = false
-            };
-            request.AddBody(body);
-
-            var response = client.Post(request);
-
-            Console.WriteLine(response);
         }
     }
 }
