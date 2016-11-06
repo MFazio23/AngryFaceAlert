@@ -66,7 +66,8 @@ namespace AngryFaceAlertApis.Coordinators
                 {
                     Emotion = emotion.Scores.GetEmotion(),
                     PersonId = person?.PersonId ?? Guid.Empty,
-                    Name = person?.Name ?? "Unknown Person"
+                    Name = person?.Name ?? "Unknown Person",
+                    Email = person?.UserData ?? "N/A"
                 });
             }
 
