@@ -8,7 +8,7 @@ namespace AngryFaceAlertApis.Models
 {
     public class PersonEmotion
     {
-        public string Emotion { get; set; }
+        public KeyValuePair<string, float> Emotion { get; set; }
         public Guid PersonId { get; set; }
         public string Name { get; set; }
     }

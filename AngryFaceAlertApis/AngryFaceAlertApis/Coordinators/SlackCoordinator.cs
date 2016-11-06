@@ -10,6 +10,17 @@ namespace AngryFaceAlertApis.Coordinators
 {
     public class SlackCoordinator
     {
+        private static Dictionary<string, List<string>> feelings = new Dictionary<string, List<string>>()
+            {
+                { "happiness", new List<string>() { "happy", "ecstatic", "loving everything about life" } },
+                { "anger", new List<string>() { "upset", "angry", "so pissed you don't even know" } },
+                { "disgust", new List<string>() { "feeling repulsed", "disgusted", "about ready to vom" } },
+                { "neutral", new List<string>() { "feeling neutral", "feeling meh", "contemplating whether life has any meaning" } },
+                { "fear", new List<string>() { "scared", "horrified", "currently wetting themselves from fear" } },
+                { "sadness", new List<string>() { "sad", "heartbroken", "might be clinically depressed right now. Who wants a hug??" } },
+                { "contempt", new List<string>() { "not having none of that", "feeling contemptuous", "feeling pretty vitrolic. Avoid if at all possible." } }
+            };
+
         public SlackMessage SendSlackMessage(IList<PersonEmotion> emotions)
         {
             var client = new RestClient("https://hooks.slack.com");
@@ -42,14 +53,13 @@ namespace AngryFaceAlertApis.Coordinators
             var text = "We found some people!\n";
 
             var emotionGroups = new Dictionary<string, List<PersonEmotion>>();
-
-            //TODO: Turn this into a foreach loop.
-            emotions.ForEach(e =>
+            
+            foreach(var e in emotions)
             {
-                if (!emotionGroups.ContainsKey(e.Emotion)) emotionGroups.Add(e.Emotion, new List<PersonEmotion>());
-
-                emotionGroups[e.Emotion].Add(e);
-            });
+                var emotionString = GetEmotionText(e);
+                if (!emotionGroups.ContainsKey(emotionString)) emotionGroups.Add(emotionString, new List<PersonEmotion>());
+                emotionGroups[emotionString].Add(e);
+            }
 
             foreach (var emotion in emotionGroups)
             {
@@ -62,7 +72,7 @@ namespace AngryFaceAlertApis.Coordinators
                     {
                         namesList.Add((unknownPeople > 1 ? unknownPeople + "" : (namesList.Any() ? "an" : "An")) + $" unknown {(unknownPeople > 1 ? "people" : "person")}");
                     }
-
+                    
                     var emotionLine = string.Join(", ", namesList) +
                                       (emotion.Value.Count > 1 ? $" are all " : " is ") + $"{emotion.Key}.\n";
                     var lastIndexOfComma = emotionLine.LastIndexOf(", ", StringComparison.CurrentCulture);
@@ -78,6 +88,28 @@ namespace AngryFaceAlertApis.Coordinators
             }
 
             return text;
+        }
+
+        public string GetEmotionText(PersonEmotion person)
+        {
+            var newEmotion = "";
+            var score = person.Emotion.Value;
+
+            var test = feelings.Where(a => a.Key == person.Emotion.Key.ToLower()).FirstOrDefault();
+
+            if(score <= .60)
+            {
+                newEmotion = test.Value[0];
+            } 
+            else if(score > .6 && score <= .90)
+            {
+                newEmotion = test.Value[1];
+            }
+            else
+            {
+                newEmotion = test.Value[2];
+            }
+            return newEmotion;
         }
     }
 }

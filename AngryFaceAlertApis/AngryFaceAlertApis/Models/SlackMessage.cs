@@ -12,5 +12,7 @@ namespace AngryFaceAlertApis.Models
         public string IconUrl { get; set; }
         [JsonProperty("mrkdwn")]
         public bool Markdown { get; set; }
+        [JsonProperty("channel")]
+        public string Channel { get; set; }
     }
 }

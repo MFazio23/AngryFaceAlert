@@ -47,7 +47,7 @@ namespace AngryFaceAlertApis.Coordinators
             var peopleEmotions = GetEmotionsForPeople(emotions, people);
 
             this._slackCoordinator.SendSlackMessage(peopleEmotions);
-
+            
             return peopleEmotions;
         }
 
@@ -55,7 +55,7 @@ namespace AngryFaceAlertApis.Coordinators
             Dictionary<Guid, Person> people)
         {
             var personEmotions = new List<PersonEmotion>();
-
+            
             foreach (var e in emotions)
             {
                 var faceId = e.Key;
@@ -64,7 +64,7 @@ namespace AngryFaceAlertApis.Coordinators
 
                 personEmotions.Add(new PersonEmotion
                 {
-                    Emotion = emotion.Scores.GetTopEmotion(),
+                    Emotion = emotion.Scores.GetEmotion(),
                     PersonId = person?.PersonId ?? Guid.Empty,
                     Name = person?.Name ?? "Unknown Person"
                 });

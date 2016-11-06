@@ -16,9 +16,9 @@ namespace AngryFaceAlertApis.Extensions
                    faceRectangle.Left == rectangle.Left && faceRectangle.Top == rectangle.Top;
         }
 
-        public static string GetTopEmotion(this Scores scores)
+        public static KeyValuePair<string, float> GetEmotion(this Scores scores)
         {
-            return scores.ToRankedList().Select(s => s.Key).FirstOrDefault();
+            return scores.ToRankedList().FirstOrDefault();
         }
     }
 }
