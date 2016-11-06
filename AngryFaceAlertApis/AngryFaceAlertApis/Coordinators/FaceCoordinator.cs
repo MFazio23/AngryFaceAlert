@@ -3,25 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.ProjectOxford.Face;
+using AngryFaceAlertApis.Utilities;
 using Microsoft.ProjectOxford.Face.Contract;
 
 namespace AngryFaceAlertApis.Coordinators
 {
     public class FaceCoordinator
     {
-        private readonly FaceServiceClient _client;
-
-        public FaceCoordinator()
-        {
-            this._client = new FaceServiceClient("");
-        }
-
         public async Task<Face[]> GetListOfFaces(Stream imageStream = null, string imageUrl = null)
         {
             try
             {
-                return imageStream != null ? await _client.DetectAsync(imageStream) : await _client.DetectAsync(imageUrl);
+                return imageStream != null
+                    ? await ApiClients.FaceServiceClient.DetectAsync(imageStream)
+                    : await ApiClients.FaceServiceClient.DetectAsync(imageUrl);
             }
             catch (Exception e)
             {
@@ -40,7 +35,7 @@ namespace AngryFaceAlertApis.Coordinators
             var faceIdArray = faceIds.ToArray();
             if (faceIdArray.Any())
             {
-                var identities = await _client.IdentifyAsync(peopleGroupId, faceIdArray, 0.5f);
+                var identities = await ApiClients.FaceServiceClient.IdentifyAsync(peopleGroupId, faceIdArray, 0.5f);
 
                 if (identities.Any())
                 {
@@ -50,7 +45,7 @@ namespace AngryFaceAlertApis.Coordinators
 
                     foreach (var id in identifyResults)
                     {
-                        var person = await _client.GetPersonAsync(peopleGroupId, id.Candidates[0].PersonId);
+                        var person = await ApiClients.FaceServiceClient.GetPersonAsync(peopleGroupId, id.Candidates[0].PersonId);
                         people.Add(id.FaceId, person);
                     }
 

@@ -7,52 +7,44 @@ using Microsoft.ProjectOxford.Face.Contract;
 using System.Threading.Tasks;
 using Microsoft.ProjectOxford.Face;
 using AngryFaceAlertApis.Models.ApiModels;
+using AngryFaceAlertApis.Utilities;
 
 namespace AngryFaceAlertApis.Coordinators
 {
     public class PersonGroupCoordinator : IPersonGroupCoordinator
     {
-        private readonly string _apiKey;
-
-        public PersonGroupCoordinator(string apiKey)
+        public PersonGroupCoordinator()
         {
-            _apiKey = apiKey;
         }
 
         public async Task<PersonGroup[]> GetAllPersonGroups()
         {
-            var client = new FaceServiceClient(_apiKey);
-            return await client.ListPersonGroupsAsync();
+            return await ApiClients.FaceServiceClient.ListPersonGroupsAsync();
         }
 
         public async Task<PersonGroup> GetPersonGroup(string id)
-        {;
-            var client = new FaceServiceClient(_apiKey);
-            return await client.GetPersonGroupAsync(id);
+        {
+            return await ApiClients.FaceServiceClient.GetPersonGroupAsync(id);
         }
 
         public async Task CreatePersonGroup(string id, NameUserDataInfoApiModel data)
         {
-            var client = new FaceServiceClient(_apiKey);
-            await client.CreatePersonGroupAsync(id, data.Name, data.UserData);
+            await ApiClients.FaceServiceClient.CreatePersonGroupAsync(id, data.Name, data.UserData);
         }
 
         public async Task UpdatePersonGroup(string id, NameUserDataInfoApiModel data)
         {
-            var client = new FaceServiceClient(_apiKey);
-            await client.UpdatePersonGroupAsync(id, data.Name, data.UserData);
+            await ApiClients.FaceServiceClient.UpdatePersonGroupAsync(id, data.Name, data.UserData);
         }
 
         public async Task DeletePersonGroup(string id)
         {
-            var client = new FaceServiceClient(_apiKey);
-            await client.DeletePersonGroupAsync(id);
+            await ApiClients.FaceServiceClient.DeletePersonGroupAsync(id);
         }
 
         public async Task TrainPersonGroup(string id)
         {
-            var client = new FaceServiceClient(_apiKey);
-            await client.TrainPersonGroupAsync(id);
+            await ApiClients.FaceServiceClient.TrainPersonGroupAsync(id);
         }
     }
 }

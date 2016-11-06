@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AngryFaceAlertApis.Coordinators.Interfaces;
 using AngryFaceAlertApis.Extensions;
 using AngryFaceAlertApis.Models;
+using AngryFaceAlertApis.Utilities;
 using Microsoft.ProjectOxford.Emotion.Contract;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
@@ -26,10 +27,7 @@ namespace AngryFaceAlertApis.Coordinators
 
         public async Task<Person> GetPerson(string personGroupId, string personId)
         {
-            //TODO: Get key from header/static class/etc.
-            var client = new FaceServiceClient("");
-
-            var person = await client.GetPersonAsync(personGroupId, Guid.Parse(personId));
+            var person = await ApiClients.FaceServiceClient.GetPersonAsync(personGroupId, Guid.Parse(personId));
 
             return person;
         }
