@@ -76,10 +76,10 @@ namespace AngryFaceAlertApis.Coordinators
 
         public void SendMessageToSlack(IList<PersonEmotion> personEmotions)
         {
-            var client = new RestClient("https://hooks.slack.com");
+            var client = new RestClient("https://hooks.slack.com/services");
             client.AddDefaultHeader("Accept", "application/json");
             client.AddDefaultHeader("Content-Type", "application/json");
-            var request = new RestRequest("")
+            var request = new RestRequest(System.Configuration.ConfigurationManager.AppSettings["SlackMessageEndUrl"])
             {
                 Method = Method.POST,
                 RequestFormat = DataFormat.Json
@@ -88,8 +88,8 @@ namespace AngryFaceAlertApis.Coordinators
             var body = new
             {
                 text = JsonConvert.SerializeObject(personEmotions),
-                username = "AFA Test II",
-                icon_url = "https://images-na.ssl-images-amazon.com/images/I/51WgT7YSg-L._AC_SR160,160_.jpg",
+                username = "Angry Kevin Bot",
+                icon_url = System.Configuration.ConfigurationManager.AppSettings["SlackMessageIconUrl"],
                 mrkdwn = false
             };
             request.AddBody(body);
