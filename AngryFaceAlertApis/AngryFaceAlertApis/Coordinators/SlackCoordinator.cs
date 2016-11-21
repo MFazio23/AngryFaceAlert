@@ -4,7 +4,6 @@ using System.Linq;
 using AngryFaceAlertApis.Models;
 using Newtonsoft.Json;
 using RestSharp;
-using WebGrease.Css.Extensions;
 
 namespace AngryFaceAlertApis.Coordinators
 {
